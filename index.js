@@ -18,8 +18,8 @@ class Engine {
         }
     }
 
-    moveByInterval() {
-        setInterval(() => this.nodes.forEach(node => node.move()), 100); // todo: hack hardcode
+    moveByInterval(interval = 1000) {
+        setInterval(() => this.nodes.forEach(node => node.move()), interval);
     }
 
     moveByRequestAnimationFrame() {
@@ -82,15 +82,16 @@ class Node {
 
         // search filter
         // replace matching innerHTML with highlight css
+        ///////////////////////
         this.nodeElement.innerHTML = this.id.replace(
             new RegExp(this.idFilter, 'gi'), match => `<span class="highlight">${match}</span>`
         )
     }
 }
 
-let engine = new Engine(200);
+let engine = new Engine(nodeCount=200);
 engine.init();
-engine.moveByRequestAnimationFrame();
+engine.moveByInterval(interval=100);
 
 /*
 讲解fps
