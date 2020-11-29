@@ -1,32 +1,295 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <a href="https://github.com/cmoseses/cmoseses.github.io"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full" style="position: fixed;right: 0;" alt="Fork me on GitHub" data-recalc-dims="1"></a>
-    <div id="container"></div>
+   <header>
+	<h1>CSS Stacking Context</h1>
+</header>
 
-    <label> search by id <input type="input" name="search"> </label>
-    
-    <script src="index.js"></script>
+<nav>
+	<a href="#norm">normal document flow</a> |
+	<a href="#zindex">z-index property</a> |
+	<a href="#float">float & positioned layout </a> |
+	<a href="#level">stacking level</a>| <a href="#context">stacking context</a>|
+	<a href="#refactor">refactor navbar</a>
+	<a href="https://github.com/cmoseses/cmoseses.github.io" target="_blank"><img
+      width="149"
+      height="149"
+      src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149"
+      class="attachment-full size-full"
+      style="position: fixed;right: 0;"
+      alt="Fork me on GitHub"
+      data-recalc-dims="1"
+  /></a>
+</nav>
+
+<main>
+	<article id="norm">
+		<header>
+			<h2>1. normal document flow - without z-index</h2>
+		</header>
+		<div class="d1" style="z-index:2;">DIV1</div>
+		<div class="d2" style="z-index:2;">DIV2</div>
+		<div class="d3" style="z-index:3;">DIV3</div>
+	</article>
+
+	<hr />
+
+	<article id="zindex">
+		<header>
+			<h2>2. z-index property - within z-index</h2>
+		</header>
+		<div class="d1" style="position: relative; z-index:2;">DIV1 z:2</div>
+		<div class="d2" style="position: relative; z-index:2;">DIV2 z:2</div>
+		<div class="d3" style="position: relative; z-index:1;">DIV3 z:1</div>
+		<div class="d4" style="position: relative; z-index:2.1;">DIV4 z:2.1 float</div>
+		<div class="d5" style="position: relative; z-index:99999999999999999;">DIV5 z:99999999999999999</div>
+		<div class="d6" style="position: relative; z-index:99999999999;">DIV6 z:99999999999</div>
+	</article>
+
+	<hr />
+
+	<article id="float" style="position: relative;" class="clearfix">
+		<header>
+			<h2>3. float & positioned layout - without z-index</h2>
+		</header>
+		<div class="d1" style="position: absolute;">DIV1 po: absolute</div>
+		<div class="d2" style="float: left;">DIV2 float: left</div>
+		<div class="d3" style="float: right;">DIV3 float: right</div>
+		<div class="d4">DIV4 no pos</div>
+		<div class="d5" style="position: absolute;">DIV5 po: absolute</div>
+		<div class="d6" style="position: relative;">DIV6 po: relative</div>
+	</article>
+
+	<hr />
+
+	<article id="level">
+		<header>
+			<h2>4. stacking level - rule of order</h2>
+		</header>
+		<img src="https://img13.360buyimg.com/ling/jfs/t1/44788/14/2669/15267/5d072966E5ab0b75b/0d67645b399fc669.png" alt="">
+	</article>
+
+		<hr />
+
+		<article id="context">
+			<header>
+				<h2>5. stacking context - z-index: 0 vs auto</h2>
+			</header>
+			<div style="position:relative; z-index:auto;">
+				<div class="rectangle" style="position:absolute; z-index:2;">
+					rectangle Content
+				</div>
+			</div>
+			<div style="position:relative; z-index:auto;">
+				<div class="square" style="position:absolute; z-index:1;">
+					square Content
+				</div>
+			</div>
+
+			<br />
+			<br />
+			<br />
+
+			<div style="position:relative; z-index:0;">
+				<div class="rectangle" style="position:absolute; z-index:2;">
+					rectangle Content
+				</div>
+			</div>
+			<div style="position:relative; z-index:0;">
+				<div class="square" style="position:absolute; z-index:1;">
+					square Content
+				</div>
+			</div>
+		</article>
+
+		<hr />
+
+		<article id="refactor">
+			<header>
+				<h2>6. refactor the navbar of this page</h2>
+			</header>
+			<ul>
+				<li>through z-index</li>
+				<li>through stacking context</li>
+				<li>z-index no more than 1 - 不二法则</li>
+				<li>chrome layer</li>
+				<li>总结：stacking context就和我们变成时候遇到的其他context一样，比如进程上下文，js的运行上下文(this),CSS里的BFC一样,用来隔离影响的。避免环境里的内容影响到环境外。
+					始终满足index大的大于小的。 如果相同，比如都是0，不糊合并，则是dom顺序</li>
+			</ul>
+		</article>
+
+		<hr />
+</main>
+
+<footer>
+	Chen Gen (Cmos) - DNA DataFlow - Ubisoft Chengdu
+</footer>
+
+
+
 </body>
 
+
 <style>
-#container{
-    position: relative;
-}
+	nav {
+		position: fixed;
+		top: 0;
+		background-color: ghostwhite;
+		width: 100%;
+	}
+</style>
 
-.node{
-    position: absolute;
-}
+<style>
+	div {
+		height: 80px;
+		width: 100px;
+	}
 
-.highlight{
-    background: red;
-}
+	main article {
+		padding-top: 10px;
+	}
 
-label{
-    position: absolute;
-    bottom: 0;
-    padding: 1rem 0;
-}
+	.clearfix:after {
+		content: " ";
+		height: 0;
+		display: block;
+		clear: both;
+	}
+
+	#norm>.d1 {
+		background-color: #f07593;
+		border: 1px dashed #b8143c;
+	}
+
+	#norm>.d2 {
+		background-color: #81d58b;
+		border: 1px dashed #2f8e3b;
+	}
+
+	#norm>.d3 {
+		background-color: #ffee7f;
+		border: 1px dashed #988500;
+	}
+
+	#zindex>.d1 {
+		background-color: #6d86e1;
+		border: 1px dashed #16296c;
+		width: auto;
+	}
+
+	#zindex>.d2 {
+		background-color: #f79f62;
+		border: 1px dashed #9f4608;
+		top: -50px;
+		height: 150px;
+		left: 20px;
+	}
+
+	#zindex>.d3 {
+		background-color: #e1adf1;
+		border: 1px dashed #b22adb;
+		line-height: 80px;
+		text-align: center;
+		top: -130px;
+		left: 90px;
+	}
+
+	#zindex>.d4 {
+		background-color: #a4f8f8;
+		border: 1px dashed #0a7a7a;
+		top: -180px;
+		left: 150px;
+		line-height: 80px;
+		width: 200px;
+		text-align: center;
+	}
+
+	#zindex>.d5 {
+		background-color: #a4f8f8;
+		border: 1px dashed #0a7a7a;
+		top: -70px;
+		left: 240px;
+		width: 200px;
+	}
+
+	#zindex>.d6 {
+		width: 200px;
+		background-color: #caf83d;
+		border: 1px dashed #85af06;
+		top: -130px;
+		left: 280px;
+	}
+
+	#float>.d1 {
+		width: 150px;
+		height: 200px;
+		top: 10px;
+		right: 140px;
+		border: 1px dashed #990000;
+		background-color: #ffdddd;
+		text-align: center;
+	}
+
+	#float>.d2 {
+		margin: 0px 10px 0px 20px;
+		width: 150px;
+		height: 200px;
+		border: 1px dashed #009900;
+		background-color: #ccffcc;
+		text-align: center;
+	}
+
+	#float>.d3 {
+		margin: 0px 20px 0px 10px;
+		width: 150px;
+		height: 200px;
+		border: 1px dashed #009900;
+		background-color: #ccffcc;
+		text-align: center;
+	}
+
+	#float>.d4 {
+		height: 100px;
+		width: auto;
+		border: 1px dashed #999966;
+		background-color: #ffffcc;
+		text-align: left;
+	}
+
+	#float>.d5 {
+		width: 150px;
+		height: 100px;
+		top: 130px;
+		left: 100px;
+		border: 1px dashed #990000;
+		background-color: #ffdddd;
+		text-align: center;
+	}
+
+	#float>.d6 {
+		width: 300px;
+		height: 100px;
+		left: 120px;
+		border: 1px dashed #990000;
+		background-color: #ffdddd;
+		text-align: center;
+	}
+
+	#context .rectangle {
+		border: 1px dashed #009900;
+		background-color: #ccffcc;
+		width: 200px;
+	}
+
+	#context .square {
+		border: 1px dashed #999966;
+		background-color: #ffffcc;
+		line-height: 150px;
+		height: 150px;
+		width: 150px;
+		top: -80px;
+		left: 150px;
+	}
 </style>
 </html>
 
